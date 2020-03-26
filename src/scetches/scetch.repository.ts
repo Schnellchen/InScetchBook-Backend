@@ -3,6 +3,7 @@ import { Scetch } from "./scetch.entity";
 import { User } from "src/auth/user.entity";
 import { CreateScetchDto } from "./dto/create-scetch.dto";
 import { GetScetchFilterDto } from "./dto/get-scetch-filter.dto";
+import { NotFoundException } from "@nestjs/common";
 
 @EntityRepository(Scetch) // Объявляет класс как репозиторий
 export class ScetchRepository extends Repository<Scetch> { // Репозиторий предназначен для работы с сущностями
@@ -29,5 +30,23 @@ export class ScetchRepository extends Repository<Scetch> { // Репозитор
 
         const scetches = await query.getMany();
         return scetches;
+    }
+
+    async getScetchById(id: number): Promise<Scetch>{
+        const found = await this.findOne(id);
+
+        if(!found){
+            throw new NotFoundException(`There is no scetch with id: "${id}"!`);
+        }
+
+        return found;
+    }
+
+    async deleteScetch(id: number): Promise<void> {
+        const result = await this.delete({id}); 
+       
+        if (result.affected === 0) {
+        throw new NotFoundException(`There is no scetch with id: "${id}"!`);
+       }
     }
 }

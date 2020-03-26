@@ -1,4 +1,4 @@
-import { Controller, Post, Body, ValidationPipe, UsePipes, Query, Get } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe, UsePipes, Query, Get, Param, ParseIntPipe, Delete } from '@nestjs/common';
 import { ScetchesService } from './scetch.service'
 import { CreateScetchDto } from './dto/create-scetch.dto';
 import { Scetch } from './scetch.entity';
@@ -16,9 +16,19 @@ export class ScetchController {
         return this.scetchesService.createScetch(createTaskDto);
     }
 
-    @Get() // Возвращение задач клиенту по запросу(т.к это контроллер)
+    @Get()
     getScetches(@Query(ValidationPipe) filterDto: GetScetchFilterDto): Promise<Scetch[]> {
         return this.scetchesService.getScetches(filterDto);
+    }
+
+    @Get("/:id") 
+    getScetchById(@Param("id", ParseIntPipe) id: number): Promise<Scetch> {
+        return this.scetchesService.getScetchById(id);
+    }
+
+    @Delete("/:id") 
+    deleteScetch(@Param("id", ParseIntPipe) id: number): Promise<void> {
+        return this.scetchesService.deleteScetch(id);
     }
         
 }

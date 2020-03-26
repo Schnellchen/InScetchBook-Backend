@@ -19,4 +19,13 @@ export class ScetchesService {
     async getScetches(filterDto: GetScetchFilterDto): Promise<Scetch[]> {
         return this.scetchRepository.getScetches(filterDto);
     }
+
+    async getScetchById(id: number): Promise<Scetch> {
+        return this.scetchRepository.getScetchById(id);
+    }
+
+    async deleteScetch(id: number): Promise<void> {
+        return this.scetchRepository.deleteScetch(id);
+    }
+
 }
