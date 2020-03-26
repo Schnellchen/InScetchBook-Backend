@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
+    
     async signUp(signUpCredentialsDto: SignUpCredentialsDto): Promise<void> {
         const { login, password, email } = signUpCredentialsDto;
 
