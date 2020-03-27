@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateScetchDto } from './dto/create-scetch.dto';
 import { Scetch } from './scetch.entity';
 import { GetScetchFilterDto } from './dto/get-scetch-filter.dto';
+import { User } from 'src/auth/user.entity';
 
 @Injectable()
 export class ScetchesService {
@@ -12,8 +13,8 @@ export class ScetchesService {
         private scetchRepository: ScetchRepository) {
     }
 
-    async createScetch(createScetchDto: CreateScetchDto): Promise<Scetch>{
-        return this.scetchRepository.createScetch(createScetchDto);
+    async createScetch(createScetchDto: CreateScetchDto, user: User): Promise<Scetch>{
+        return this.scetchRepository.createScetch(createScetchDto, user);
     }
 
     async getScetches(filterDto: GetScetchFilterDto): Promise<Scetch[]> {
@@ -24,8 +25,8 @@ export class ScetchesService {
         return this.scetchRepository.getScetchById(id);
     }
 
-    async deleteScetch(id: number): Promise<void> {
-        return this.scetchRepository.deleteScetch(id);
+    async deleteScetch(id: number, user: User): Promise<void> {
+        return this.scetchRepository.deleteScetch(id, user);
     }
 
 }

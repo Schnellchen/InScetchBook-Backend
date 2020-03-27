@@ -8,20 +8,21 @@ import { NotFoundException } from "@nestjs/common";
 @EntityRepository(Scetch) // Объявляет класс как репозиторий
 export class ScetchRepository extends Repository<Scetch> { // Репозиторий предназначен для работы с сущностями
     
-    async createScetch(createScetchDto: CreateScetchDto): Promise<Scetch>{
+    async createScetch(createScetchDto: CreateScetchDto, user: User): Promise<Scetch>{
         const { title, description } = createScetchDto;
         const scetch = new Scetch;
 
         scetch.title = title;
         scetch.description = description;
-
+        scetch.user = user;
         await scetch.save();
-
+        delete scetch.user;
+    
         return scetch;
     }
 
     async getScetches(filterDto: GetScetchFilterDto): Promise<Scetch[]> {
-        const { search} = filterDto;
+        const { search } = filterDto;
         const query = this.createQueryBuilder('scetch'); // Построение сложного запроса для БД. scetch - ключевое слово, ссылка на сущность
         
         if (search) {
@@ -42,7 +43,7 @@ export class ScetchRepository extends Repository<Scetch> { // Репозитор
         return found;
     }
 
-    async deleteScetch(id: number): Promise<void> {
+    async deleteScetch(id: number, user: User): Promise<void> {
         const result = await this.delete({id}); 
        
         if (result.affected === 0) {

@@ -1,5 +1,6 @@
-import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, Unique, OneToMany } from "typeorm";
 import * as bcrypt from "bcrypt";
+import { Scetch } from "src/scetches/scetch.entity";
 
 @Entity()
 @Unique(['login']) 
@@ -19,6 +20,9 @@ export class User extends BaseEntity {
 
     @Column()
     salt: string;
+
+    @OneToMany(type => Scetch, scetch => scetch.user, {eager: true})
+    scetches: Scetch[];
 
     async validatePassword(password: string): Promise<boolean> {
         const hash = await bcrypt.hash(password, this.salt);

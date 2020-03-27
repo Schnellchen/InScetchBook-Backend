@@ -12,4 +12,10 @@ export class Scetch extends BaseEntity {
     @Column()
     description: string;
 
+    @ManyToOne(type => User, user => user.scetches, {eager: false})
+    user: User;
+
+    // Нужно для обращения к id пользователя т.к. оно не задается явно, а задается отношением сверху
+    @Column()
+    userId: number;
 }
