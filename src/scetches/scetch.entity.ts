@@ -12,6 +12,9 @@ export class Scetch extends BaseEntity {
     @Column()
     description: string;
 
+    @Column()
+    imagePath: string;
+
     @ManyToOne(type => User, user => user.scetches, {eager: false})
     user: User;
 

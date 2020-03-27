@@ -8,21 +8,23 @@ import { NotFoundException } from "@nestjs/common";
 @EntityRepository(Scetch) // Объявляет класс как репозиторий
 export class ScetchRepository extends Repository<Scetch> { // Репозиторий предназначен для работы с сущностями
     
-    async createScetch(createScetchDto: CreateScetchDto, user: User): Promise<Scetch>{
+    async createScetch(createScetchDto: CreateScetchDto, user: User, image): Promise<Scetch>{
         const { title, description } = createScetchDto;
         const scetch = new Scetch;
 
         scetch.title = title;
         scetch.description = description;
+        scetch.imagePath = image.path;
         scetch.user = user;
+
         await scetch.save();
         delete scetch.user;
     
         return scetch;
     }
 
-    async getScetches(filterDto: GetScetchFilterDto): Promise<Scetch[]> {
-        const { search } = filterDto;
+    async getAllScetches(filterDto: GetScetchFilterDto): Promise<Scetch[]> {
+        const { search} = filterDto;
         const query = this.createQueryBuilder('scetch'); // Построение сложного запроса для БД. scetch - ключевое слово, ссылка на сущность
         
         if (search) {

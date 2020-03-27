@@ -1,5 +1,5 @@
 // Структура DTO. Это объект передачи данных
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString, IsObject } from "class-validator";
 
 export class CreateScetchDto {
     @IsNotEmpty() // Декоратор пакета class-validator. Проверка на пустоту
@@ -9,4 +9,5 @@ export class CreateScetchDto {
     @IsNotEmpty()
     @IsString()
     description: string;
+
 }

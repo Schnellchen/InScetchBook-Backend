@@ -5,8 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ScetchesModule } from './scetches/scetch.module';
 
 
+
 @Module({
-  imports: [TypeOrmModule.forRoot(typeOrmConfig), AuthModule, ScetchesModule],
-  
+  imports: [TypeOrmModule.forRoot(typeOrmConfig), AuthModule, ScetchesModule,],
+
 })
 export class AppModule {}

@@ -4,9 +4,10 @@ import { ScetchesService } from './scetch.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ScetchRepository } from './scetch.repository';
 import { AuthModule } from 'src/auth/auth.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ScetchRepository]), AuthModule ],
+  imports: [TypeOrmModule.forFeature([ScetchRepository]), AuthModule, MulterModule.register({dest: './uploads'}) ],
   controllers: [ScetchController],
   providers: [ScetchesService]
 })
