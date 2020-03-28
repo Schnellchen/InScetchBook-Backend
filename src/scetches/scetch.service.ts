@@ -13,7 +13,7 @@ export class ScetchesService {
         private scetchRepository: ScetchRepository) {
     }
 
-    async createScetch(createScetchDto: CreateScetchDto, user: User, image): Promise<Scetch>{
+    async createScetch(createScetchDto: CreateScetchDto, user: User, image: Express.Multer.File): Promise<Scetch>{
         return this.scetchRepository.createScetch(createScetchDto, user, image);
     }
 

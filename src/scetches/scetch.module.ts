@@ -7,7 +7,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ScetchRepository]), AuthModule, MulterModule.register({dest: './uploads'}) ],
+  imports: [TypeOrmModule.forFeature([ScetchRepository]), AuthModule, MulterModule.register() ],
   controllers: [ScetchController],
   providers: [ScetchesService]
 })

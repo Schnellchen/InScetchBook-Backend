@@ -3,12 +3,18 @@ import { Scetch } from "./scetch.entity";
 import { User } from "src/auth/user.entity";
 import { CreateScetchDto } from "./dto/create-scetch.dto";
 import { GetScetchFilterDto } from "./dto/get-scetch-filter.dto";
-import { NotFoundException } from "@nestjs/common";
+import { NotFoundException, BadRequestException } from "@nestjs/common";
 
 @EntityRepository(Scetch) // Объявляет класс как репозиторий
 export class ScetchRepository extends Repository<Scetch> { // Репозиторий предназначен для работы с сущностями
     
-    async createScetch(createScetchDto: CreateScetchDto, user: User, image): Promise<Scetch>{
+    async createScetch(createScetchDto: CreateScetchDto, user: User, image: Express.Multer.File): Promise<Scetch>{
+        
+        // Проверка на отсутствие изображения в запросе. Можно объявить где угодно?
+        if (image === undefined){
+            throw new BadRequestException(`File must not be empty!`);
+        }
+        
         const { title, description } = createScetchDto;
         const scetch = new Scetch;
 

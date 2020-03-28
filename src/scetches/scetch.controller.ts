@@ -1,4 +1,4 @@
-import { Controller, Post, Body, ValidationPipe, UsePipes, Query, Get, Param, ParseIntPipe, Delete, UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe, UsePipes, Query, Get, Param, ParseIntPipe, Delete, UseGuards, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
 import { ScetchesService } from './scetch.service'
 import { CreateScetchDto } from './dto/create-scetch.dto';
 import { Scetch } from './scetch.entity';
@@ -6,8 +6,9 @@ import { GetScetchFilterDto } from './dto/get-scetch-filter.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/auth/user.entity';
 import { GetUser } from 'src/auth/get-user.decorator';
-import { FileInterceptor, FileFieldsInterceptor, MulterModule } from '@nestjs/platform-express';
+import { FileInterceptor, FileFieldsInterceptor,} from '@nestjs/platform-express';
 import { multerOptions } from '../config/multer.config';
+
 
 
 @Controller('scetches')
@@ -19,8 +20,8 @@ export class ScetchController {
     @UseGuards(AuthGuard())
     @UsePipes(ValidationPipe)
     @UseInterceptors(FileInterceptor('image', multerOptions)) // 'image' должно совпадать с ключом запроса
-    createScetch(@Body() createTaskDto: CreateScetchDto, @GetUser() user: User, @UploadedFile() image): Promise<Scetch> {
-        return this.scetchesService.createScetch(createTaskDto, user, image);
+    createScetch(@Body() createTaskDto: CreateScetchDto, @GetUser() user: User, @UploadedFile() image: Express.Multer.File): Promise<Scetch> {
+      return this.scetchesService.createScetch(createTaskDto, user, image);
     }
 
     @Get()
@@ -39,10 +40,14 @@ export class ScetchController {
         return this.scetchesService.deleteScetch(id, user);
     }
 
+    // Тестовый роут
     @Post("upload")
     @UseInterceptors(FileInterceptor('image', multerOptions))
-    uploadedFile(@UploadedFile() image) {
-        return (image);
+    uploadedFile(@UploadedFile() image: Express.Multer.File) {
+        if (image === undefined){
+          throw new BadRequestException(`File must not be empty!`);
+        }
+        return(image);
 }
 
 /* @Post("upload")
