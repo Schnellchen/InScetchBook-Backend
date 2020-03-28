@@ -6,7 +6,8 @@ import { GetScetchFilterDto } from './dto/get-scetch-filter.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/auth/user.entity';
 import { GetUser } from 'src/auth/get-user.decorator';
-import { FileInterceptor, FileFieldsInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FileFieldsInterceptor, MulterModule } from '@nestjs/platform-express';
+import { multerOptions } from '../config/multer.config';
 
 
 @Controller('scetches')
@@ -17,7 +18,7 @@ export class ScetchController {
     @Post()
     @UseGuards(AuthGuard())
     @UsePipes(ValidationPipe)
-    @UseInterceptors(FileInterceptor('image')) // 'image' должно совпадать с ключом запроса
+    @UseInterceptors(FileInterceptor('image', multerOptions)) // 'image' должно совпадать с ключом запроса
     createScetch(@Body() createTaskDto: CreateScetchDto, @GetUser() user: User, @UploadedFile() image): Promise<Scetch> {
         return this.scetchesService.createScetch(createTaskDto, user, image);
     }
@@ -39,7 +40,7 @@ export class ScetchController {
     }
 
     @Post("upload")
-    @UseInterceptors(FileInterceptor('image'),)
+    @UseInterceptors(FileInterceptor('image', multerOptions))
     uploadedFile(@UploadedFile() image) {
         return (image);
 }
