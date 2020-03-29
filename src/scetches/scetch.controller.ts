@@ -1,4 +1,4 @@
-import { Controller, Post, Body, ValidationPipe, UsePipes, Query, Get, Param, ParseIntPipe, Delete, UseGuards, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe, UsePipes, Query, Get, Param, ParseIntPipe, Delete, UseGuards, UseInterceptors, UploadedFile, BadRequestException, HttpException, HttpStatus } from '@nestjs/common';
 import { ScetchesService } from './scetch.service'
 import { CreateScetchDto } from './dto/create-scetch.dto';
 import { Scetch } from './scetch.entity';
@@ -6,7 +6,7 @@ import { GetScetchFilterDto } from './dto/get-scetch-filter.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/auth/user.entity';
 import { GetUser } from 'src/auth/get-user.decorator';
-import { FileInterceptor, FileFieldsInterceptor,} from '@nestjs/platform-express';
+import { FileInterceptor, } from '@nestjs/platform-express';
 import { multerOptions } from '../config/multer.config';
 
 
@@ -40,28 +40,23 @@ export class ScetchController {
         return this.scetchesService.deleteScetch(id, user);
     }
 
-    // Тестовый роут
-    @Post("upload")
-    @UseInterceptors(FileInterceptor('image', multerOptions))
-    uploadedFile(@UploadedFile() image: Express.Multer.File) {
-        if (image === undefined){
-          throw new BadRequestException(`File must not be empty!`);
-        }
-        return(image);
-}
-
+//Тестовый роут
 /* @Post("upload")
     @UseInterceptors( // Если Multermodule.register("folder") работает неккоректно
-    FileFieldsInterceptor(
-      [
-        { name: 'image', maxCount: 1 },
-        { name: 'thumbnail', maxCount: 1 },
-        { name: 'sample', maxCount: 1 },
-      ],
-      { dest: 'uploads' },
-    ),
-  )
-    uploadedFile(@UploadedFile() image) {
+    FileInterceptor("image", {
+      fileFilter: (req: any, file: Express.Multer.File, cb: any) => {
+        const body = req.body;
+        console.log(file);
+        if (file.mimetype.match(/\/(jpg|jpeg|png|bmp)$/) && file !== undefined) {
+            // Разрешить хранение файла
+            cb(null, true);
+        } else {
+            // Запретить хранение файла
+            cb(new HttpException(`Unsupported file type ${extname(file.originalname)}`, HttpStatus.BAD_REQUEST), false);
+        }
+    }
+    }) )
+    uploadedFile(@UploadedFile() image: Express.Multer.File) {
         console.log(image);
 } */
         

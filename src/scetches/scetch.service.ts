@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { ScetchRepository } from './scetch.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateScetchDto } from './dto/create-scetch.dto';
@@ -14,6 +14,10 @@ export class ScetchesService {
     }
 
     async createScetch(createScetchDto: CreateScetchDto, user: User, image: Express.Multer.File): Promise<Scetch>{
+        // Проверка существует ли файл
+        if (image === undefined){
+            throw new BadRequestException(`File must not be empty!`);
+        }
         return this.scetchRepository.createScetch(createScetchDto, user, image);
     }
 

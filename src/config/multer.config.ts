@@ -1,10 +1,11 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { HttpException, HttpStatus, } from "@nestjs/common";
 import { extname } from "path";
 import { diskStorage } from "multer";
 
 
-// Опции для настройки multer
+// Файл конфигурации для multer
 export const multerOptions = {
+
     // Хранение файлов
     storage: diskStorage({
     destination: './uploads'}),
@@ -12,18 +13,21 @@ export const multerOptions = {
     // Параметры файлов
     limits: {
         files: 1,
-        fileSize: 1 * 10 * 10 * 10 * 10 * 10 * 10 * 10, // 10 mb in bytes
+        fileSize: 5 * 10 * 10 * 10 * 10 * 10 * 10, // 5 mb в байтах
     },
 
-    // Расширения файлов
+    // Проверка на расширение файла и на случай, если отправляется пустой запрос с одним файлом
     fileFilter: (req: any, file: Express.Multer.File, cb: any) => {
-        /* console.log(JSON.parse(req.body)); */
-        if (file.mimetype.match(/\/(jpg|jpeg|png|bmp)$/)) {
-            // Allow storage of file
+        const body = req.body;
+        console.log(file);
+        if (file.mimetype.match(/\/(jpg|jpeg|png|bmp)$/) && 
+        ((body.title !== "") && (body.title !== undefined) && 
+        (body.description !== "") && (body.description !== undefined))) {
+            // Разрешить хранение файла
             cb(null, true);
         } else {
-            // Reject file
-            cb(new HttpException(`Unsupported file type ${extname(file.originalname)}`, HttpStatus.BAD_REQUEST), false);
+            // Запретить хранение файла
+            cb(new HttpException(`Unsupported file type or data value`, HttpStatus.BAD_REQUEST), false);
         }
     },
 
