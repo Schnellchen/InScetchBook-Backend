@@ -5,8 +5,8 @@ import { CreateScetchDto } from "./dto/create-scetch.dto";
 import { GetScetchFilterDto } from "./dto/get-scetch-filter.dto";
 import { NotFoundException, } from "@nestjs/common";
 
-@EntityRepository(Scetch) // Объявляет класс как репозиторий
-export class ScetchRepository extends Repository<Scetch> { // Репозиторий предназначен для работы с сущностями
+@EntityRepository(Scetch)
+export class ScetchRepository extends Repository<Scetch> { 
     
     async createScetch(createScetchDto: CreateScetchDto, user: User, image: Express.Multer.File): Promise<Scetch>{
         
@@ -26,10 +26,10 @@ export class ScetchRepository extends Repository<Scetch> { // Репозитор
 
     async getAllScetches(filterDto: GetScetchFilterDto): Promise<Scetch[]> {
         const { search} = filterDto;
-        const query = this.createQueryBuilder('scetch'); // Построение сложного запроса для БД. scetch - ключевое слово, ссылка на сущность
+        const query = this.createQueryBuilder('scetch'); 
         
         if (search) {
-            query.andWhere('(scetch.title LIKE :search OR scetch.description LIKE :search)', {search: `%${search}%`}); // lIKE почти как =, но позволяет частичное совпадение. %${} позволяет искать частичное совпадение
+            query.andWhere('(scetch.title LIKE :search OR scetch.description LIKE :search)', {search: `%${search}%`}); 
         }
 
         const scetches = await query.getMany();
@@ -47,8 +47,7 @@ export class ScetchRepository extends Repository<Scetch> { // Репозитор
     }
 
     async deleteScetch(id: number, user: User): Promise<void> {
-        const result = await this.delete({id}); 
-       
+        const result = await this.delete({id, userId: user.id}); 
         if (result.affected === 0) {
         throw new NotFoundException(`There is no scetch with id: "${id}"!`);
        }

@@ -19,7 +19,7 @@ export const multerOptions = {
     // Проверка на расширение файла и на случай, если отправляется пустой запрос с одним файлом
     fileFilter: (req: any, file: Express.Multer.File, cb: any) => {
         const body = req.body;
-        console.log(file);
+        
         if (file.mimetype.match(/\/(jpg|jpeg|png|bmp)$/) && 
         ((body.title !== "") && (body.title !== undefined) && 
         (body.description !== "") && (body.description !== undefined))) {

@@ -9,12 +9,11 @@ import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
-    PassportModule.register({ defaultStrategy: "jwt" }),  // Стратегия c использованием токенов для аутентификации
-    JwtModule.register({ // Модуль управления токенами 
-        // Конфигурация
-        secret: "SiteSecret", // Секретный ключ, которым подписывается токен
+    PassportModule.register({ defaultStrategy: "jwt" }),
+    JwtModule.register({
+        secret: "SiteSecret", 
         signOptions: {
-          expiresIn: 3600,  // Срок действия токена
+          expiresIn: 3600,  
         },
       }),
     TypeOrmModule.forFeature([UserRepository]),
@@ -22,7 +21,7 @@ import { JwtStrategy } from './jwt.strategy';
   controllers: [AuthController],
   providers: [AuthService,
   JwtStrategy,],
-  exports: [ // При импорте данного модуля будет импортироваться и эти
+  exports: [ 
     JwtStrategy,
     PassportModule,
   ],

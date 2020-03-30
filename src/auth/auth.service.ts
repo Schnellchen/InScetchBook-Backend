@@ -11,7 +11,7 @@ export class AuthService {
     constructor(
         @InjectRepository(UserRepository)
         private userRepository: UserRepository,
-        private jwtService: JwtService, // Импорт сервиса (совместно с модулем в файле модуля). Обеспечивает создание и подпись токена
+        private jwtService: JwtService, 
     ) {}
 
     async signUp(signUpCredentialsDto: SignUpCredentialsDto): Promise<void> {
@@ -25,9 +25,9 @@ export class AuthService {
             throw new UnauthorizedException("Неправильные данные!");
         } 
 
-        const payload: JwtPayload = { login }; // Нагрузка токена, информация о пользователе. Вынесена в отдельный интерфейс
-        const accessToken = await this.jwtService.sign(payload); // Генерация токена
+        const payload: JwtPayload = { login }; 
+        const accessToken = await this.jwtService.sign(payload); 
 
-        return { accessToken }; // Возвращаем токен
+        return { accessToken }; 
     }
 }

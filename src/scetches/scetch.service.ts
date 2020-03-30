@@ -8,7 +8,7 @@ import { User } from 'src/auth/user.entity';
 
 @Injectable()
 export class ScetchesService {
-    constructor ( // Конструктор тк это класс и требует метод конструктора
+    constructor (
         @InjectRepository(ScetchRepository)
         private scetchRepository: ScetchRepository) {
     }

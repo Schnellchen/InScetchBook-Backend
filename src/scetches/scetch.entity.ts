@@ -1,12 +1,12 @@
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 import { User } from "src/auth/user.entity";
 
-@Entity() // Помечает класс как сущность для создания таблицы в БД
+@Entity() 
 export class Scetch extends BaseEntity {
-    @PrimaryGeneratedColumn() // Колонка первичного ключа?
+    @PrimaryGeneratedColumn()
     id: number;
 
-    @Column() // Помечает свойство класса как колонку в таблице
+    @Column()
     title: string;
 
     @Column()
@@ -18,7 +18,6 @@ export class Scetch extends BaseEntity {
     @ManyToOne(type => User, user => user.scetches, {eager: false})
     user: User;
 
-    // Нужно для обращения к id пользователя т.к. оно не задается явно, а задается отношением сверху
     @Column()
     userId: number;
 }

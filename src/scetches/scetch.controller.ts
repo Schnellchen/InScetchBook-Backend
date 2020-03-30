@@ -1,4 +1,4 @@
-import { Controller, Post, Body, ValidationPipe, UsePipes, Query, Get, Param, ParseIntPipe, Delete, UseGuards, UseInterceptors, UploadedFile, BadRequestException, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe, UsePipes, Query, Get, Param, ParseIntPipe, Delete, UseGuards, UseInterceptors, UploadedFile, Req} from '@nestjs/common';
 import { ScetchesService } from './scetch.service'
 import { CreateScetchDto } from './dto/create-scetch.dto';
 import { Scetch } from './scetch.entity';
@@ -8,7 +8,6 @@ import { User } from 'src/auth/user.entity';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { FileInterceptor, } from '@nestjs/platform-express';
 import { multerOptions } from '../config/multer.config';
-
 
 
 @Controller('scetches')
@@ -24,7 +23,7 @@ export class ScetchController {
       return this.scetchesService.createScetch(createTaskDto, user, image);
     }
 
-    @Get()
+    @Get("all")
     getAllScetches(@Query(ValidationPipe) filterDto: GetScetchFilterDto): Promise<Scetch[]> {
         return this.scetchesService.getAllScetches(filterDto);
     }
@@ -36,11 +35,12 @@ export class ScetchController {
     }
 
     @Delete("/:id") 
-    deleteScetch(@Param("id", ParseIntPipe) id: number, @GetUser() user: User): Promise<void> {
+    @UseGuards(AuthGuard())
+    deleteScetch(@Param("id", ParseIntPipe) id: number, @GetUser() user: User,): Promise<void> {
         return this.scetchesService.deleteScetch(id, user);
     }
 
-//Тестовый роут
+//Тестовый запрос
 /* @Post("upload")
     @UseInterceptors( // Если Multermodule.register("folder") работает неккоректно
     FileInterceptor("image", {

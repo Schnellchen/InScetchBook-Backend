@@ -1,3 +1,3 @@
-export interface JwtPayload { // В отдельном файле тк может понадобиться в любом месте приложения
+export interface JwtPayload { 
     login: string;
 }
