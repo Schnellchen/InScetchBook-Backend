@@ -21,8 +21,8 @@ export class ScetchesService {
         return this.scetchRepository.createScetch(createScetchDto, user, image);
     }
 
-    async getAllScetches(filterDto: GetScetchFilterDto): Promise<Scetch[]> {
-        return this.scetchRepository.getAllScetches(filterDto);
+    async getScetches(filterDto: GetScetchFilterDto): Promise<Scetch[]> {
+        return this.scetchRepository.getScetches(filterDto);
     }
 
     async getScetchById(id: number): Promise<Scetch> {

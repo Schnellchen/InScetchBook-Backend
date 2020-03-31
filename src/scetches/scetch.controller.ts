@@ -23,9 +23,9 @@ export class ScetchController {
       return this.scetchesService.createScetch(createTaskDto, user, image);
     }
 
-    @Get("all")
-    getAllScetches(@Query(ValidationPipe) filterDto: GetScetchFilterDto): Promise<Scetch[]> {
-        return this.scetchesService.getAllScetches(filterDto);
+    @Get()
+    getScetches(@Query(ValidationPipe) filterDto: GetScetchFilterDto, @Req() req): Promise<Scetch[]> {
+        return this.scetchesService.getScetches(filterDto);
     }
 
 
@@ -39,25 +39,5 @@ export class ScetchController {
     deleteScetch(@Param("id", ParseIntPipe) id: number, @GetUser() user: User,): Promise<void> {
         return this.scetchesService.deleteScetch(id, user);
     }
-
-//Тестовый запрос
-/* @Post("upload")
-    @UseInterceptors( // Если Multermodule.register("folder") работает неккоректно
-    FileInterceptor("image", {
-      fileFilter: (req: any, file: Express.Multer.File, cb: any) => {
-        const body = req.body;
-        console.log(file);
-        if (file.mimetype.match(/\/(jpg|jpeg|png|bmp)$/) && file !== undefined) {
-            // Разрешить хранение файла
-            cb(null, true);
-        } else {
-            // Запретить хранение файла
-            cb(new HttpException(`Unsupported file type ${extname(file.originalname)}`, HttpStatus.BAD_REQUEST), false);
-        }
-    }
-    }) )
-    uploadedFile(@UploadedFile() image: Express.Multer.File) {
-        console.log(image);
-} */
         
 }
