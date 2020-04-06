@@ -8,7 +8,11 @@ export const multerOptions = {
 
     // Хранение файлов
     storage: diskStorage({
-    destination: './uploads'}),
+    destination: './uploads',
+    filename: ( req, file, cb ) => {
+            cb( null, Date.now() + '-' + file.originalname);
+        }
+}),
 
     // Параметры файлов
     limits: {
